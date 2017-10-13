@@ -1,4 +1,4 @@
-/* Copyright (c) 2014-2016, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2014-2017, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -19,6 +19,10 @@
 	qcom,msm-id = <246 0x0>;
 	qcom,pmic-id = <0x20009 0x2000A 0x0 0x0>;
 	interrupt-parent = <&intc>;
+
+	chosen {
+		bootargs = "sched_enable_hmp=1 sched_enable_power_aware=1 app_setting.use_32bit_app_setting=1";
+	};
 
 	aliases {
 		sdhc1 = &sdhc_1; /* SDC1 eMMC slot */
@@ -54,7 +58,6 @@
 			qcom,limits-info = <&mitigation_profile0>;
 			enable-method = "psci";
 			qcom,ea = <&ea0>;
-			sched-energy-costs = <&CPU_COST_0 &CLUSTER_COST_0>;
 			next-level-cache = <&L2_0>;
 			L2_0: l2-cache {
 			      compatible = "arm,arch-cache";
@@ -77,7 +80,6 @@
 			qcom,limits-info = <&mitigation_profile1>;
 			enable-method = "psci";
 			qcom,ea = <&ea1>;
-			sched-energy-costs = <&CPU_COST_0 &CLUSTER_COST_0>;
 			next-level-cache = <&L2_0>;
 			L1_D_1: l1-dcache {
 				compatible = "arm,arch-cache";
@@ -95,7 +97,6 @@
 			qcom,limits-info = <&mitigation_profile2>;
 			enable-method = "psci";
 			qcom,ea = <&ea2>;
-			sched-energy-costs = <&CPU_COST_1 &CLUSTER_COST_1>;
 			next-level-cache = <&L2_1>;
 			L2_1: l2-cache {
 			      compatible = "arm,arch-cache";
@@ -118,7 +119,6 @@
 			enable-method = "psci";
 			qcom,limits-info = <&mitigation_profile3>;
 			qcom,ea = <&ea3>;
-			sched-energy-costs = <&CPU_COST_1 &CLUSTER_COST_1>;
 			next-level-cache = <&L2_1>;
 			L1_D_101: l1-dcache {
 				compatible = "arm,arch-cache";
@@ -150,125 +150,6 @@
 				};
 			};
 		};
-		energy-costs {
-			CPU_COST_0: core-cost0 {
-				busy-cost-data = <
-					149 90
-					188 111
-					225 133
-					257 160
-					281 182
-					315 210
-					368 251
-					406 306
-					428 332
-					469 379
-					502 438
-					538 494
-					581 550
-					611 613
-					648 670
-					684 752
-					729 848
-					763 925
-				>;
-				idle-cost-data = <
-			  		2 2 0
-				>;
-			};
-			CPU_COST_1: core-cost1 {
-				busy-cost-data = <
-					149 93
-					188 111
-					225 133
-					257 160
-					281 182
-					315 210
-					348 252
-					374 290
-					428 332
-					469 379
-					502 438
-					538 494
-					581 550
-					611 613
-					648 670
-					684 752
-					729 848
-					763 925
-					795 1018
-					832 1073
-					868 1209
-					905 1298
-					952 1428
-					979 1521
-					1024 1715
-				>;
-				idle-cost-data = <
-				      2 2 0
-				>;
-			};
-			CLUSTER_COST_0: cluster-cost0 {
-				busy-cost-data = <
-					149 4
-					188 4
-					225 4
-					257 4
-					281 4
-					315 4
-					368 8
-					406 9
-					428 15
-					469 16
-					502 21
-					538 22
-					581 29
-					611 32
-					648 42
-					684 49
-					729 41
-					763 52
-				>;
-				idle-cost-data = <
-					0
-					0
-				>;
-			};
-			CLUSTER_COST_1: cluster-cost1 {
-				busy-cost-data = <
-					149 4
-					188 4
-					225 4
-					257 4
-					281 4
-					315 4
-					348 7
-					374 10
-					428 15
-					469 16
-					502 21
-					538 22
-					581 29
-					611 32
-					648 42
-					684 49
-					729 41
-					763 52
-					795 62
-					832 69
-					868 75
-					905 81
-					952 90
-					979 93
-					1024 96
-				>;
-				idle-cost-data = <
-					0
-					0
-				>;
-			};
-		};
-
 	};
 
 	soc: soc { };
@@ -455,15 +336,12 @@
 		qcom,master-id = <84>;
 		qcom,clk-freq-out = <400000>;
 		qcom,clk-freq-in  = <19200000>;
-		qcom,i2c-clk = <&tlmm 88 0>;
-		qcom,i2c-dat = <&tlmm 87 0>;
 		clock-names = "iface_clk", "core_clk";
 		clocks = <&clock_gcc clk_gcc_blsp2_ahb_clk>,
 			 <&clock_gcc clk_gcc_blsp2_qup6_i2c_apps_clk>;
-		pinctrl-names = "i2c_active", "i2c_sleep", "i2c_bitbang";
+		pinctrl-names = "i2c_active", "i2c_sleep";
 		pinctrl-0 = <&i2c_12_active>;
 		pinctrl-1 = <&i2c_12_sleep>;
-		pinctrl-2 = <&i2c_12_bitbang>;
 	};
 
 
@@ -1448,7 +1326,7 @@
 		gdsc-vdd-supply = <&gdsc_pcie_0>;
 		vreg-1.8-supply = <&pm8994_l12>;
 		vreg-0.9-supply = <&pm8994_l28>;
-		vreg-cx-supply = <&pm8994_s1_corner_ao>;
+		vreg-cx-supply = <&pm8994_s1_corner>;
 
 		qcom,vreg-0.9-voltage-level = <925000 925000 24000>;
 		qcom,vreg-cx-voltage-level = <7 4 0>;
@@ -1601,7 +1479,7 @@
 		gdsc-vdd-supply = <&gdsc_pcie_1>;
 		vreg-1.8-supply = <&pm8994_l12>;
 		vreg-0.9-supply = <&pm8994_l28>;
-		vreg-cx-supply = <&pm8994_s1_corner_ao>;
+		vreg-cx-supply = <&pm8994_s1_corner>;
 
 		qcom,vreg-0.9-voltage-level = <925000 925000 24000>;
 		qcom,vreg-cx-voltage-level = <7 5 0>;
@@ -1752,10 +1630,10 @@
 		gdsc-vdd-supply = <&gdsc_pcie_2>;
 		vreg-1.8-supply = <&pm8994_l12>;
 		vreg-0.9-supply = <&pm8994_l28>;
-		vreg-cx-supply = <&pm8994_s1_corner_ao>;
+		vreg-cx-supply = <&pm8994_s1_corner>;
 
 		qcom,vreg-0.9-voltage-level = <925000 925000 24000>;
-		qcom,vreg-cx-voltage-level = <7 4 0>;
+		qcom,vreg-cx-voltage-level = <7 5 0>;
 
 		qcom,l1-supported;
 		qcom,l1ss-supported;
@@ -1856,7 +1734,7 @@
 			label = "dsps";
 		};
 
-		qcom,smd-rpm-summary {
+		qcom,smd-rpm {
 			compatible = "qcom,smd";
 			qcom,smd-edge = <15>;
 			qcom,smd-irq-offset = <0x0>;
@@ -1875,6 +1753,7 @@
 		interrupts = <0 28 0>, <0 29 0>;
 		qcom,bark-time = <11000>;
 		qcom,pet-time = <10000>;
+		qcom,ipi-ping;
 		qcom,wakeup-enable;
 	};
 
@@ -2348,15 +2227,18 @@
 	qcom,cnss {
 		compatible = "qcom,cnss";
 		wlan-bootstrap-gpio = <&tlmm 46 0>;
-		wlan-en-gpio = <&pm8994_gpios 8 0>;
+		vdd-wlan-en-supply = <&wlan_en_vreg>;
 		vdd-wlan-supply = <&rome_vreg>;
 		vdd-wlan-io-supply = <&pm8994_s4>;
 		vdd-wlan-xtal-supply = <&pm8994_l30>;
 		vdd-wlan-core-supply = <&pm8994_s3>;
 		wlan-ant-switch-supply = <&pm8994_l18_pin_ctrl>;
+		qcom,wlan-en-vreg-support;
+		qcom,enable-bootstrap-gpio;
 		qcom,notify-modem-status;
-		pinctrl-names = "default";
-		pinctrl-0 = <&cnss_default>;
+		pinctrl-names = "bootstrap_active", "bootstrap_sleep";
+		pinctrl-0 = <&cnss_bootstrap_active>;
+		pinctrl-1 = <&cnss_bootstrap_sleep>;
 		qcom,wlan-rc-num = <0>;
 		qcom,wlan-ramdump-dynamic = <0x200000>;
 
@@ -2572,6 +2454,8 @@
 		qcom,use-sw-aes-xts-algo;
 		qcom,use-sw-aes-ccm-algo;
 		qcom,use-sw-ahash-algo;
+		qcom,use-sw-hmac-algo;
+		qcom,use-sw-aead-algo;
 	};
 
 	qcom_cedev: qcedev@660000 {
@@ -2861,17 +2745,17 @@
 		compatible = "qcom,msm-thermal";
 		reg = <0x70000 0x1000>;
 		qcom,sensor-id = <11>;
-		qcom,poll-ms = <250>;
+		qcom,poll-ms = <100>;
 		qcom,limit-temp = <60>;
 		qcom,temp-hysteresis = <10>;
 		qcom,therm-reset-temp = <115>;
 		qcom,freq-step = <4>;
-		qcom,core-limit-temp = <80>;
+		qcom,core-limit-temp = <70>;
 		qcom,core-temp-hysteresis = <10>;
 		qcom,hotplug-temp = <105>;
 		qcom,hotplug-temp-hysteresis = <40>;
-		qcom,freq-mitigation-temp = <95>;
-		qcom,freq-mitigation-temp-hysteresis = <10>;
+		qcom,freq-mitigation-temp = <90>;
+		qcom,freq-mitigation-temp-hysteresis = <40>;
 		qcom,freq-mitigation-value = <576000>;
 		qcom,online-hotplug-core;
 		qcom,synchronous-cluster-id = <0 1>;

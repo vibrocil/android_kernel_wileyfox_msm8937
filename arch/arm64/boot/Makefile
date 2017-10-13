@@ -14,7 +14,7 @@
 # Based on the ia64 boot/Makefile.
 #
 
-include $(srctree)/arch/arm64/boot/dts/htc/Makefile
+
 
 targets := Image Image.gz Image.lz4
 
