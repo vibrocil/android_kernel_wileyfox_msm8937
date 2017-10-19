@@ -104,6 +104,7 @@ struct ipa_usb_xdci_connect_params {
  */
 struct ipa_usb_xdci_chan_scratch {
 	u16 last_trb_addr_iova;
+	u16 last_trb_addr;
 	u8 const_buffer_size;
 	u32 depcmd_low_addr;
 	u8 depcmd_hi_addr;
