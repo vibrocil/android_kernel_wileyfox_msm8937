@@ -90,7 +90,7 @@ static inline bool logging_wakeup_reasons_nosync(void) { return false; }
 static inline bool logging_wakeup_reasons(void) { return false; }
 static inline bool log_possible_wakeup_reason(int irq,
 			struct irq_desc *desc,
-			bool (*handler)(unsigned int, struct irq_desc *)) { return true; }
+			void (*handler)(unsigned int, struct irq_desc *)) { return true; }
 
 #endif
 

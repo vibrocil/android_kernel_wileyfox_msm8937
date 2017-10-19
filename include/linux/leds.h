@@ -153,6 +153,11 @@ extern void led_set_brightness(struct led_classdev *led_cdev,
  * Returns: 0 on success or negative error value on failure
  */
 extern int led_update_brightness(struct led_classdev *led_cdev);
+
+
+
+
+
 /**
  * led_sysfs_is_disabled - check if LED sysfs interface is disabled
  * @led_cdev: the LED to query
