@@ -782,7 +782,11 @@ config FORCE_MAX_ZONEORDER
 	int
 	default "14" if (ARM64_64K_PAGES && TRANSPARENT_HUGEPAGE)
 	default "11"
-
+config ARCH_MSM8937_X50
+        bool "hy msm8937_x50 usb"
+        depends on ARCH_MSM8937
+        help
+           hy project x50 pcb
 menuconfig ARMV8_DEPRECATED
 	bool "Emulate deprecated/obsolete ARMv8 instructions"
 	depends on COMPAT
