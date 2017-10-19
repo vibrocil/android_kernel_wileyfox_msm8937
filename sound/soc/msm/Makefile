@@ -30,7 +30,7 @@ snd-soc-msm8x16-objs += msm8952-slimbus.o msm8952-dai-links.o
 obj-$(CONFIG_SND_SOC_MSM8X16) += snd-soc-msm8x16.o
 
 #HTC_AUD_START
-obj-$(CONFIG_SND_SOC_MSM8996) += htc_acoustic_alsa.o
+obj-$(CONFIG_SND_SOC_MSM8X16) += htc_acoustic_alsa.o
 #HTC_AUD_END
 
 # for MDM Californium sound card driver
