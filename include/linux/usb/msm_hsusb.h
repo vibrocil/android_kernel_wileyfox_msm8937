@@ -168,7 +168,7 @@ enum usb_chg_type {
 	USB_DCP_CHARGER,
 	USB_CDP_CHARGER,
 	USB_PROPRIETARY_CHARGER,
-	USB_FLOATED_CHARGER,
+	USB_UNSUPPORTED_CHARGER,
 };
 
 /**
@@ -222,6 +222,24 @@ enum usb_id_state {
 	USB_ID_GROUND = 0,
 	USB_ID_FLOAT,
 };
+
+
+/**
+ * Used for different states involved in Floating charger detection.
+ *
+ * FLOATING_AS_SDP              This is used to detect floating charger as SDP
+ * FLOATING_AS_DCP              This is used to detect floating charger as DCP
+ * FLOATING_AS_INVALID          This is used to detect floating charger is not
+ *                              supported and detects as INVALID
+ *
+*/
+enum floated_chg_type {
+        FLOATING_AS_SDP = 0,
+        FLOATING_AS_DCP,
+        FLOATING_AS_INVALID,
+};
+
+
 
 /**
  * struct msm_otg_platform_data - platform device data
@@ -326,6 +344,7 @@ struct msm_otg_platform_data {
 	bool emulation;
 	bool enable_streaming;
 	bool enable_axi_prefetch;
+        enum floated_chg_type enable_floated_charger;
 	bool enable_sdp_typec_current_limit;
 };
 
@@ -533,6 +552,7 @@ struct msm_otg {
 	struct completion ext_chg_wait;
 	struct pinctrl *phy_pinctrl;
 	bool is_ext_chg_dcp;
+	bool is_ext_chg_detected;
 	struct qpnp_vadc_chip	*vadc_dev;
 	int ext_id_irq;
 	bool phy_irq_pending;
@@ -637,6 +657,7 @@ void msm_bam_usb_host_notify_on_resume(void);
 void msm_bam_hsic_host_notify_on_resume(void);
 bool msm_bam_hsic_host_pipe_empty(void);
 bool msm_usb_bam_enable(enum usb_ctrl ctrl, bool bam_enable);
+int msm_do_bam_disable_enable(enum usb_ctrl ctrl);
 #else
 static inline void msm_bam_set_usb_host_dev(struct device *dev) {}
 static inline void msm_bam_set_hsic_host_dev(struct device *dev) {}
@@ -650,11 +671,16 @@ static inline bool msm_usb_bam_enable(enum usb_ctrl ctrl, bool bam_enable)
 {
 	return true;
 }
+int msm_do_bam_disable_enable(enum usb_ctrl ctrl) { return true; }
 #endif
 #ifdef CONFIG_USB_CI13XXX_MSM
+void msm_hw_soft_reset(void);
 void msm_hw_bam_disable(bool bam_disable);
 void msm_usb_irq_disable(bool disable);
 #else
+static inline void msm_hw_soft_reset(void)
+{
+}
 static inline void msm_hw_bam_disable(bool bam_disable)
 {
 }

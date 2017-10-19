@@ -63,6 +63,16 @@ struct rfkill_ops {
 	void	(*query)(struct rfkill *rfkill, void *data);
 	int	(*set_block)(void *data, bool blocked);
 };
+/*
+ * led_sysfs_is_disabled - check if LED sysfs interface is disabled
+ * @led_cdev: the LED to query
+ *
+ * Returns: true if the led_cdev's sysfs interface is disabled.
+ */
+static inline bool led_sysfs_is_disabled(struct led_classdev *led_cdev)
+{
+        return led_cdev->flags & LED_SYSFS_DISABLE;
+}
 
 #if defined(CONFIG_RFKILL) || defined(CONFIG_RFKILL_MODULE)
 /**

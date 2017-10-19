@@ -39,6 +39,10 @@ struct msm_camera_sensor_slave_info32 {
 	struct msm_sensor_power_setting_array32 power_setting_array;
 	uint8_t  is_init_params_valid;
 	struct msm_sensor_init_params sensor_init_params;
+	/*Add for CIT sensor module info by liulihao*/
+        struct hycit_data_k cam_data;
+        /*end*/
+
 	enum msm_sensor_output_format_t output_format;
 };
 
@@ -71,6 +75,15 @@ struct csid_cfg_data32 {
 		compat_uptr_t csid_testmode_params;
 	} cfg;
 };
+struct msm_ir_led_cfg_data_t32 {
+        enum msm_ir_led_cfg_type_t cfg_type;
+        int32_t pwm_duty_on_ns;
+        int32_t pwm_period_ns;
+};
+
+struct msm_ir_cut_cfg_data_t32 {
+        enum msm_ir_cut_cfg_type_t cfg_type;
+};
 
 struct eeprom_read_t32 {
 	compat_uptr_t dbuffer;
@@ -87,7 +100,6 @@ struct msm_eeprom_info_t32 {
 	enum i2c_freq_mode_t i2c_freq_mode;
 	compat_uptr_t mem_map_array;
 };
-
 struct msm_eeprom_cfg_data32 {
 	enum eeprom_cfg_type_t cfgtype;
 	uint8_t is_supported;
@@ -258,6 +270,11 @@ struct msm_flash_cfg_data_t32 {
 
 #define VIDIOC_MSM_FLASH_CFG32 \
 	_IOWR('V', BASE_VIDIOC_PRIVATE + 13, struct msm_flash_cfg_data_t32)
+#define VIDIOC_MSM_IR_LED_CFG32 \
+        _IOWR('V', BASE_VIDIOC_PRIVATE + 14, struct msm_ir_led_cfg_data_t32)
+
+#define VIDIOC_MSM_IR_CUT_CFG32 \
+        _IOWR('V', BASE_VIDIOC_PRIVATE + 15, struct msm_ir_cut_cfg_data_t32)
 #endif
 
 #endif

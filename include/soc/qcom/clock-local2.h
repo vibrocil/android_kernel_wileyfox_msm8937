@@ -66,7 +66,7 @@ struct clk_freq_tbl {
  */
 struct rcg_clk {
 	u32 cmd_rcgr_reg;
-
+	u32 mnd_reg_width;
 	void   (*set_rate)(struct rcg_clk *, struct clk_freq_tbl *);
 
 	struct clk_freq_tbl *freq_tbl;

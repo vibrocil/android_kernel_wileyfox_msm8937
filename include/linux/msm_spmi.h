@@ -121,8 +121,7 @@ struct spmi_resource {
  *  @num_dev_node: number of device_node structures.
  *  @sid: Slave Identifier.
  *  @id: Unique identifier to differentiate from other spmi devices with
- *       possibly same name.
- *
+ *	 possibly same name.
  */
 struct spmi_device {
 	struct device		dev;

@@ -1090,6 +1090,11 @@ int ipa_reset_endpoint(u32 clnt_hdl);
  * Remove ep delay
  */
 int ipa_clear_endpoint_delay(u32 clnt_hdl);
+/*
+ * Disable ep
+ */
+int ipa_disable_endpoint(u32 clnt_hdl);
+
 
 /*
  * Configuration
@@ -1454,6 +1459,16 @@ static inline int ipa_clear_endpoint_delay(u32 clnt_hdl)
 {
 	return -EPERM;
 }
+
+/*
+ * Disable ep
+ */
+static inline int ipa_disable_endpoint(u32 clnt_hdl)
+{
+        return -EPERM;
+}
+
+
 
 /*
  * Configuration

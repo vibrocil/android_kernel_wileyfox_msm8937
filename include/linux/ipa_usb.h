@@ -103,7 +103,7 @@ struct ipa_usb_xdci_connect_params {
  * @depcmd_hi_addr:      Used to generate "Update Transfer" command.
  */
 struct ipa_usb_xdci_chan_scratch {
-	u16 last_trb_addr;
+	u16 last_trb_addr_iova;
 	u8 const_buffer_size;
 	u32 depcmd_low_addr;
 	u8 depcmd_hi_addr;
@@ -140,6 +140,10 @@ struct ipa_usb_xdci_chan_params {
 	u16 xfer_ring_len;
 	u64 xfer_ring_base_addr;
 	struct ipa_usb_xdci_chan_scratch xfer_scratch;
+        u64 xfer_ring_base_addr_iova;
+        u32 data_buff_base_len;
+        u64 data_buff_base_addr;
+        u64 data_buff_base_addr_iova;
 };
 
 /**
