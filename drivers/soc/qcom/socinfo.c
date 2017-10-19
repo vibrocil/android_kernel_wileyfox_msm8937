@@ -682,7 +682,7 @@ static uint32_t socinfo_get_foundry_id(void)
 		: 0;
 }
 
-static uint32_t socinfo_get_serial_number(void)
+uint32_t socinfo_get_serial_number(void)
 {
 	return socinfo ?
 		(socinfo_format >= SOCINFO_VERSION(0, 10) ?
